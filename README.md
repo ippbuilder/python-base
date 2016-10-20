@@ -1,7 +1,7 @@
 ## Supported tags and respective `Dockerfile` links
 
-* [`latest`, `python2.7` _(Dockerfile)_]
-* [`python3.5` _(Dockerfile)_]
+* [`python2.7`]
+* [`python3.5`]
 
 # uwsgi-nginx
 
