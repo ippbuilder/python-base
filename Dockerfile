@@ -1,8 +1,18 @@
-FROM python:3.5
+FROM debian:jessie
+MAINTAINER MOHSEN@IPROPERTY
 
-MAINTAINER Sebastian Ramirez <tiangolo@gmail.com>
+# Install Python
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl \
+        python \
+        python-dev \
+        python-pip \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install uWSGI
-RUN pip install uwsgi
+RUN pip install uwsgi flask
 
 # Standard set up Nginx
 ENV NGINX_VERSION 1.9.11-1~jessie
@@ -20,20 +30,16 @@ EXPOSE 80 443
 
 # Make NGINX run on the foreground
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-# Remove default configuration from Nginx
-RUN rm /etc/nginx/conf.d/default.conf
 # Copy the modified Nginx conf
-COPY nginx.conf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
 COPY uwsgi.ini /etc/uwsgi/
 
 # Install Supervisord
 RUN apt-get update && apt-get install -y supervisor \
 && rm -rf /var/lib/apt/lists/*
+
 # Custom Supervisord config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-COPY ./app /app
-WORKDIR /app
 
 CMD ["/usr/bin/supervisord"]
