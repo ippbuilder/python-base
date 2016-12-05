@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Install uWSGI
-RUN pip install uwsgi flask requests pymemcache
+RUN pip install uwsgi flask requests pymemcache boto3
 
 # Standard set up Nginx
 ENV NGINX_VERSION 1.9.11-1~jessie
