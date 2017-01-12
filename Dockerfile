@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install uwsgi flask requests pymemcache boto3
 
 # Install pyodbc
-RUN apt-get install  -y tdsodbc unixodbc-dev \
+RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
  && pip install pyodbc
 ADD odbcinst.ini /etc/odbcinst.ini
 
