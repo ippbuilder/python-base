@@ -13,23 +13,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Install uWSGI
-RUN pip install uwsgi flask requests pymemcache boto3 pyodbc
+RUN pip install uwsgi flask requests pymemcache boto3
+
+# Install pyodbc
+RUN apt-get install  -y tdsodbc unixodbc-dev \
+ && pip install pyodbc
+ADD odbcinst.ini /etc/odbcinst.ini
 
 # Standard set up Nginx
 ENV NGINX_VERSION 1.9.11-1~jessie
 
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
-	&& echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
-	&& apt-get update \
-	&& apt-get install -y ca-certificates nginx=${NGINX_VERSION} gettext-base \
-	&& rm -rf /var/lib/apt/lists/* \
-	# to make docker able to get logs
-	&& ln -sf /dev/stdout /var/log/nginx/access.log \
-	&& ln -sf /dev/stderr /var/log/nginx/error.log \
-	# to make the logs contain the actual source IP
-	&& sed -i "s/remote_addr/http_x_forwarded_for/g" /etc/nginx/nginx.conf \
-	# to make NGINX run on the foreground
-	&& echo "daemon off;" >> /etc/nginx/nginx.conf
+ && echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
+ && apt-get update \
+ && apt-get install -y ca-certificates nginx=${NGINX_VERSION} gettext-base \
+ && rm -rf /var/lib/apt/lists/* \
+ # to make docker able to get logs
+ && ln -sf /dev/stdout /var/log/nginx/access.log \
+ && ln -sf /dev/stderr /var/log/nginx/error.log \
+ # to make the logs contain the actual source IP
+ && sed -i "s/remote_addr/http_x_forwarded_for/g" /etc/nginx/nginx.conf \
+ # to make NGINX run on the foreground
+ && echo "daemon off;" >> /etc/nginx/nginx.conf
 	
 EXPOSE 80 443
 
