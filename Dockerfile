@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Install uWSGI
-RUN pip install uwsgi flask requests pymemcache boto3
+RUN pip install uwsgi flask flask-cors requests pymemcache boto3
 
 # Install pyodbc
 RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
