@@ -2,22 +2,19 @@ FROM debian:jessie
 MAINTAINER MOHSEN@IPROPERTY
 
 # Install Python
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        build-essential \
-        curl \
-        python \
-        python-dev \
-        python-pip \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl python python-dev python-pip \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && curl -o pip_installer.py https://bootstrap.pypa.io/get-pip.py \
+ && python pip_installer.py \
+ && /usr/local/bin/pip -V 
 
 # Install uWSGI
-RUN pip install uwsgi flask flask-cors requests pymemcache boto3
+RUN /usr/local/bin/pip install uwsgi flask flask-cors requests pymemcache boto3
 
 # Install pyodbc
 RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
- && pip install pyodbc
+ && /usr/local/bin/pip install pyodbc
 ADD odbcinst.ini /etc/odbcinst.ini
 
 # Standard set up Nginx
