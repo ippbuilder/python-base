@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends build-essential
  && /usr/local/bin/pip -V 
 
 # Install uWSGI
-RUN /usr/local/bin/pip install uwsgi flask flask-cors requests pymemcache boto3
+RUN /usr/local/bin/pip install uwsgi flask flask-cors requests pymemcache boto3 phonenumbers
 
 # Install pyodbc
 RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
